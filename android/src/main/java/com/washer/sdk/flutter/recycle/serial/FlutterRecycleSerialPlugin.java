@@ -35,10 +35,12 @@ public class FlutterRecycleSerialPlugin implements FlutterPlugin, MethodCallHand
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), NAMESPACE);
     channel.setMethodCallHandler(this);
+    recycleController = new RecycleController();
   }
 
   @Override
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
+    System.out.println(call.method);
     switch (call.method) {
       case "getPlatformVersion":
         result.success("Android " + android.os.Build.VERSION.RELEASE);
