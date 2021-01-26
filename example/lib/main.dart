@@ -45,38 +45,6 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> connect() async {
     RecycleSerial.connect("/dev/ttyS0", 9600).then((_connection) {
-      showToast("true");
-    }).catchError((error) {
-      print(error);
-    });
-  }
-
-  Future<void> openElectricDoor() async {
-    RecycleSerial.openElectricDoor().then((_connection) {
-      showToast(_connection.toString());
-    }).catchError((error) {
-      print(error);
-    });
-  }
-
-  Future<void> closeElectricDoor() async {
-    RecycleSerial.closeElectricDoor().then((_connection) {
-      showToast(_connection.toString());
-    }).catchError((error) {
-      print(error);
-    });
-  }
-
-  Future<void> stopElectricDoor() async {
-    RecycleSerial.stopElectricDoor().then((_connection) {
-      showToast(_connection.toString());
-    }).catchError((error) {
-      print(error);
-    });
-  }
-
-  Future<void> stopElectricDoor() async {
-    RecycleSerial.stopElectricDoor().then((_connection) {
       showToast(_connection.toString());
     }).catchError((error) {
       print(error);
@@ -92,6 +60,7 @@ class _MyAppState extends State<MyApp> {
                 title: const Text('Plugin example app'),
               ),
               body: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   FlatButton(
                     child: Text('获取版本号'),
@@ -100,31 +69,51 @@ class _MyAppState extends State<MyApp> {
                       initPlatformState();
                     },
                   ),
-                  FlatButton(
-                    child: Text('连接'),
-                    onPressed: (){
-                      connect();
-                    },
-                    color: Colors.blue[200],
+                  Row(
+                    children: <Widget>[
+                      FlatButton(
+                        child: Text('连接'),
+                        onPressed: (){
+                          connect();
+                        },
+                        color: Colors.blue[200],
+                      ),
+                    ],
                   ),
-                  FlatButton(
-                    child: Text('电动门开门控制'),
-                    onPressed: (){
-                      openElectricDoor();
-                    },
-                    color: Colors.blue[200],
-                  ),
-                  FlatButton(
-                    child: Text('电动门关门控制'),
-                    onPressed: (){
-                      closeElectricDoor();
-                    },
-                    color: Colors.blue[200],
+                  Row(
+                    children: <Widget>[
+                      FlatButton(
+                        child: Text('电动门开门控制'),
+                        onPressed: (){
+                          RecycleSerial.openElectricDoor().then((_connection) {
+                            showToast(_connection.toString());
+                          }).catchError((error) {
+                            print(error);
+                          });
+                        },
+                        color: Colors.blue[200],
+                      ),
+                      FlatButton(
+                        child: Text('电动门关门控制'),
+                        onPressed: (){
+                          RecycleSerial.closeElectricDoor().then((_connection) {
+                            showToast(_connection.toString());
+                          }).catchError((error) {
+                            print(error);
+                          });
+                        },
+                        color: Colors.blue[200],
+                      ),
+                    ],
                   ),
                   FlatButton(
                     child: Text('电动门开门或关门停止控制'),
                     onPressed: (){
-                      stopElectricDoor();
+                      RecycleSerial.stopElectricDoor().then((_connection) {
+                        showToast(_connection.toString());
+                      }).catchError((error) {
+                        print(error);
+                      });
                     },
                     color: Colors.blue[200],
                   ),
@@ -150,27 +139,31 @@ class _MyAppState extends State<MyApp> {
                     },
                     color: Colors.blue[200],
                   ),
-                  FlatButton(
-                    child: Text('开电控锁'),
-                    onPressed: (){
-                      RecycleSerial.openLock().then((_connection) {
-                        showToast(_connection.toString());
-                      }).catchError((error) {
-                        print(error);
-                      });
-                    },
-                    color: Colors.blue[200],
-                  ),
-                  FlatButton(
-                    child: Text('电控锁开关锁'),
-                    onPressed: (){
-                      RecycleSerial.isLockOpened().then((_connection) {
-                        showToast(_connection.toString());
-                      }).catchError((error) {
-                        print(error);
-                      });
-                    },
-                    color: Colors.blue[200],
+                  Row(
+                    children: [
+                      FlatButton(
+                        child: Text('开电控锁'),
+                        onPressed: (){
+                          RecycleSerial.openLock().then((_connection) {
+                            showToast(_connection.toString());
+                          }).catchError((error) {
+                            print(error);
+                          });
+                        },
+                        color: Colors.blue[200],
+                      ),
+                      FlatButton(
+                        child: Text('电控锁开关锁'),
+                        onPressed: (){
+                          RecycleSerial.isLockOpened().then((_connection) {
+                            showToast(_connection.toString());
+                          }).catchError((error) {
+                            print(error);
+                          });
+                        },
+                        color: Colors.blue[200],
+                      ),
+                    ],
                   ),
                   FlatButton(
                     child: Text('有无手术服'),

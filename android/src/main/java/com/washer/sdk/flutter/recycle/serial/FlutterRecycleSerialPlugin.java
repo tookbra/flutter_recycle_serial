@@ -1,10 +1,12 @@
 package com.washer.sdk.flutter.recycle.serial;
 
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.washer.sdk.recycle.RecycleController;
+import com.washer.sdk.recycle.RecycleException;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
@@ -26,6 +28,8 @@ public class FlutterRecycleSerialPlugin implements FlutterPlugin, MethodCallHand
   private static final String NAMESPACE = "flutter_recycle_serial";
 
   private RecycleController recycleController = null;
+
+  private boolean isClient = false;
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -50,8 +54,14 @@ public class FlutterRecycleSerialPlugin implements FlutterPlugin, MethodCallHand
         }
         String path = call.argument("path");
         Integer baudRate = call.argument("baudRate");
-        recycleController = RecycleController.getInstance(path, baudRate);
-        result.success(true);
+
+        try {
+          recycleController = RecycleController.getInstance(path, baudRate);
+          isClient = true;
+          result.success(true);
+        } catch (RecycleException e) {
+          result.success(false);
+        }
         break;
       case "openElectricDoor":
         result.success(recycleController.openElectricDoor());
