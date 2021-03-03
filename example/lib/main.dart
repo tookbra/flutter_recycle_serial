@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> connect() async {
-    RecycleSerial.connect("/dev/ttyS0", 9600).then((_connection) {
+    RecycleSerial.connect("/dev/ttyS4", 9600).then((_connection) {
       showToast(_connection.toString());
     }).catchError((error) {
       print(error);
@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> {
                           RecycleSerial.openElectricDoor().then((_connection) {
                             showToast(_connection.toString());
                           }).catchError((error) {
-                            print(error);
+                            showToast(error.toString());
                           });
                         },
                         color: Colors.blue[200],

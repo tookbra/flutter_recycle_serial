@@ -1,12 +1,21 @@
 package com.washer.sdk.flutter.recycle.serial;
 
-import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-import com.washer.sdk.recycle.RecycleController;
-import com.washer.sdk.recycle.RecycleException;
+import com.licheedev.serialworker.core.Callback;
+import com.washer.sdk.flutter.recycle.serial.command.RecvBase;
+import com.washer.sdk.flutter.recycle.serial.command.RecvCommand;
+import com.washer.sdk.flutter.recycle.serial.command.send.CloseElectricDoorCommand;
+import com.washer.sdk.flutter.recycle.serial.command.send.ElectricDoorCloseStatusCommand;
+import com.washer.sdk.flutter.recycle.serial.command.send.ElectricDoorOpenStatusCommand;
+import com.washer.sdk.flutter.recycle.serial.command.send.HaveThingCommand;
+import com.washer.sdk.flutter.recycle.serial.command.send.LockStatusCommand;
+import com.washer.sdk.flutter.recycle.serial.command.send.OpenElectricDoorCommand;
+import com.washer.sdk.flutter.recycle.serial.command.send.OpenLockCommand;
+import com.washer.sdk.flutter.recycle.serial.command.send.StopElectricDoorCommand;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
@@ -45,48 +54,151 @@ public class FlutterRecycleSerialPlugin implements FlutterPlugin, MethodCallHand
         result.success("Android " + android.os.Build.VERSION.RELEASE);
         break;
       case "connect":
-        if (!call.hasArgument("path")) {
-          result.error("invalid_argument", "argument 'path' not found", null);
-          break;
-        }
-        if (!call.hasArgument("baudRate")) {
-          result.error("invalid_argument", "argument 'baudRate' not found", null);
-          break;
-        }
-        String path = call.argument("path");
-        Integer baudRate = call.argument("baudRate");
-
         try {
-          recycleController = RecycleController.getInstance(path, baudRate);
-          isClient = true;
-          result.success(true);
-        } catch (RecycleException e) {
-          result.success(false);
+          SerialManager.get().initDevice();
+        } catch (Exception e) {
+          e.printStackTrace();
+          result.error(e.getMessage(), "", "");
         }
+        break;
+      case "disConnect":
+        SerialManager.get().release();
         break;
       case "openElectricDoor":
-        result.success(recycleController.openElectricDoor());
+        SerialManager.get().sendCommand(new OpenElectricDoorCommand(), new Callback<RecvBase>() {
+          @Override
+          public void onSuccess(@Nullable RecvBase recvBase) {
+            if(recvBase.getResult().equals("06")) {
+              result.success(true);
+            } else {
+              result.success(false);
+            }
+          }
+
+          @Override
+          public void onFailure(@NonNull Throwable tr) {
+            result.error("open electric door error", "", "");
+          }
+        });
         break;
       case "closeElectricDoor":
-        result.success(recycleController.closeElectricDoor());
+        SerialManager.get().sendCommand(new CloseElectricDoorCommand(), new Callback<RecvBase>() {
+          @Override
+          public void onSuccess(@Nullable RecvBase recvBase) {
+            if(recvBase.getResult().equals("06")) {
+              result.success(true);
+            } else {
+              result.success(false);
+            }
+          }
+
+          @Override
+          public void onFailure(@NonNull Throwable tr) {
+            result.error("close electric door error", "", "");
+          }
+        });
         break;
       case "stopElectricDoor":
-        result.success(recycleController.stopElectricDoor());
+        SerialManager.get().sendCommand(new StopElectricDoorCommand(), new Callback<RecvBase>() {
+          @Override
+          public void onSuccess(@Nullable RecvBase recvBase) {
+            if(recvBase.getResult().equals("06")) {
+              result.success(true);
+            } else {
+              result.success(false);
+            }
+          }
+
+          @Override
+          public void onFailure(@NonNull Throwable tr) {
+            result.error("stop electric door error", "", "");
+          }
+        });
         break;
       case "isDoorClosed":
-        result.success(recycleController.isDoorClosed());
+        SerialManager.get().sendCommand(new ElectricDoorCloseStatusCommand(), new Callback<RecvBase>() {
+          @Override
+          public void onSuccess(@Nullable RecvBase recvBase) {
+            if(recvBase.getResult().equals(DoorStatusEnum.CLOSED.data)) {
+              result.success(true);
+            } else {
+              result.success(false);
+            }
+          }
+
+          @Override
+          public void onFailure(@NonNull Throwable tr) {
+            result.error("is door closed error", "", "");
+          }
+        });
         break;
       case "isDoorOpened":
-        result.success(recycleController.isDoorOpened());
+        SerialManager.get().sendCommand(new ElectricDoorOpenStatusCommand(), new Callback<RecvBase>() {
+          @Override
+          public void onSuccess(@Nullable RecvBase recvBase) {
+            if(recvBase.getResult().equals(DoorStatusEnum.OPENED.data)) {
+              result.success(true);
+            } else {
+              result.success(false);
+            }
+          }
+
+          @Override
+          public void onFailure(@NonNull Throwable tr) {
+            result.error("is door opened error", "", "");
+          }
+        });
         break;
       case "openLock":
-        result.success(recycleController.openLock());
+        SerialManager.get().sendCommand(new OpenLockCommand(), new Callback<RecvBase>() {
+          @Override
+          public void onSuccess(@Nullable RecvBase recvBase) {
+            if(recvBase.getResult().equals("06")) {
+              result.success(true);
+            } else {
+              result.success(false);
+            }
+          }
+
+          @Override
+          public void onFailure(@NonNull Throwable tr) {
+            result.error("open lock error", "", "");
+          }
+        });
         break;
       case "isLockOpened":
-        result.success(recycleController.isLockOpened());
+        SerialManager.get().sendCommand(new LockStatusCommand(), new Callback<RecvBase>() {
+          @Override
+          public void onSuccess(@Nullable RecvBase recvBase) {
+            if(recvBase.getResult().equals(LockStatusEnum.OPENED.data)) {
+              result.success(true);
+            } else {
+              result.success(false);
+            }
+          }
+
+          @Override
+          public void onFailure(@NonNull Throwable tr) {
+            result.error("is lock opened error", "", "");
+          }
+        });
         break;
       case "isHaveThing":
-        result.success(recycleController.isHaveThing());
+        SerialManager.get().sendCommand(new HaveThingCommand(), new Callback<RecvBase>() {
+          @Override
+          public void onSuccess(@Nullable RecvBase recvBase) {
+            if(recvBase.getResult().equals(InductionStatusEnum.YES.data)) {
+              result.success(true);
+            } else {
+              result.success(false);
+            }
+          }
+
+          @Override
+          public void onFailure(@NonNull Throwable tr) {
+            result.error("is have thing error", "", "");
+          }
+        });
         break;
       default:
         result.notImplemented();
