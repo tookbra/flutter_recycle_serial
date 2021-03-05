@@ -36,15 +36,10 @@ public class FlutterRecycleSerialPlugin implements FlutterPlugin, MethodCallHand
 
   private static final String NAMESPACE = "flutter_recycle_serial";
 
-  private RecycleController recycleController = null;
-
-  private boolean isClient = false;
-
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), NAMESPACE);
     channel.setMethodCallHandler(this);
-    recycleController = new RecycleController();
   }
 
   @Override
