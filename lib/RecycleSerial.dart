@@ -5,9 +5,8 @@ class RecycleSerial {
       FlutterCardSerial._methodChannel.invokeMethod('getPlatformVersion');
 
   /// 打开连接
-  static Future<bool> connect(
-      String path, int baudRate) async {
-    return FlutterCardSerial._methodChannel.invokeMethod("connect", {"path": path, "baudRate": baudRate});
+  static Future<bool> connect() async {
+    return FlutterCardSerial._methodChannel.invokeMethod("connect");
   }
 
   /// 断开连接
