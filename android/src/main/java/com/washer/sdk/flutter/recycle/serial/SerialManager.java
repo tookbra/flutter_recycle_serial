@@ -63,7 +63,9 @@ public class SerialManager {
 
     public void initDevice() throws Exception {
         SerialPort.setSuPath("/system/xbin/su");
-        controlWorker.openSerial();
+        if(!controlWorker.isSerialOpened()) {
+            controlWorker.openSerial();
+        }
     }
 
     /**

@@ -21,6 +21,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initPlatformState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      connect();
+    });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -44,7 +47,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> connect() async {
-    RecycleSerial.connect("/dev/ttyS4", 9600).then((_connection) {
+    RecycleSerial.connect().then((_connection) {
       showToast(_connection.toString());
     }).catchError((error) {
       print(error);
