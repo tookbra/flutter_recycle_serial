@@ -53,7 +53,7 @@ public class FlutterRecycleSerialPlugin implements FlutterPlugin, MethodCallHand
           SerialManager.get().initDevice();
         } catch (Exception e) {
           e.printStackTrace();
-          result.error(e.getMessage(), "", "");
+          result.error("-10", e.getMessage(), "");
         }
         break;
       case "disConnect":
@@ -72,7 +72,7 @@ public class FlutterRecycleSerialPlugin implements FlutterPlugin, MethodCallHand
 
           @Override
           public void onFailure(@NonNull Throwable tr) {
-            result.error("open electric door error", "", "");
+            result.error("-10", "open electric door error", "");
           }
         });
         break;
@@ -89,7 +89,7 @@ public class FlutterRecycleSerialPlugin implements FlutterPlugin, MethodCallHand
 
           @Override
           public void onFailure(@NonNull Throwable tr) {
-            result.error("close electric door error", "", "");
+            result.error("-10", "close electric door error", "");
           }
         });
         break;
@@ -106,7 +106,7 @@ public class FlutterRecycleSerialPlugin implements FlutterPlugin, MethodCallHand
 
           @Override
           public void onFailure(@NonNull Throwable tr) {
-            result.error("stop electric door error", "", "");
+            result.error("-10", "stop electric door error", "");
           }
         });
         break;
@@ -123,7 +123,7 @@ public class FlutterRecycleSerialPlugin implements FlutterPlugin, MethodCallHand
 
           @Override
           public void onFailure(@NonNull Throwable tr) {
-            result.error("is door closed error", "", "");
+            result.error("-10", "is door closed error", "");
           }
         });
         break;
@@ -140,7 +140,7 @@ public class FlutterRecycleSerialPlugin implements FlutterPlugin, MethodCallHand
 
           @Override
           public void onFailure(@NonNull Throwable tr) {
-            result.error("is door opened error", "", "");
+            result.error("-10", "is door opened error", "");
           }
         });
         break;
@@ -157,7 +157,7 @@ public class FlutterRecycleSerialPlugin implements FlutterPlugin, MethodCallHand
 
           @Override
           public void onFailure(@NonNull Throwable tr) {
-            result.error("open lock error", "", "");
+            result.error("-10", "open lock error", "");
           }
         });
         break;
@@ -174,7 +174,7 @@ public class FlutterRecycleSerialPlugin implements FlutterPlugin, MethodCallHand
 
           @Override
           public void onFailure(@NonNull Throwable tr) {
-            result.error("is lock opened error", "", "");
+            result.error("-10", "is lock opened error", "");
           }
         });
         break;
@@ -191,7 +191,7 @@ public class FlutterRecycleSerialPlugin implements FlutterPlugin, MethodCallHand
 
           @Override
           public void onFailure(@NonNull Throwable tr) {
-            result.error("is have thing error", "", "");
+            result.error("-10", "is have thing error", "");
           }
         });
         break;
